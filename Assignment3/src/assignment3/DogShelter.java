@@ -140,11 +140,13 @@ public class DogShelter implements Iterable<Dog> {
             DogNode L = this.younger;
             DogNode B = this.younger.older;
 
-            L.parent = this.parent;
             L.older = this;
-            this.parent = L;
-            this.younger = B;
+            L.parent = this.parent;
 
+            this.younger = B;
+            this.parent = L;
+            if(B != null)
+                B.parent = this;
             return L;
         }
 
@@ -160,10 +162,13 @@ public class DogShelter implements Iterable<Dog> {
             DogNode R = this.older;
             DogNode A = this.older.younger;
 
-            R.parent = this.parent;
             R.younger = this;
+            R.parent = this.parent;
+
             this.parent = R;
             this.older = A;
+            if(A != null)
+                A.parent = this;
 
             return R;
         }
