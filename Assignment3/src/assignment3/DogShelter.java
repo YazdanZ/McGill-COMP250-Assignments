@@ -98,8 +98,20 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public DogNode shelter ( Dog d ) {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            // perform BST insertion
+            if (d.getAge () < this.d.getAge ()) {
+                if (this.younger == null) {
+                    this.younger = new DogNode ( d );
+                    this.younger.parent = this;
+                } else this.younger = this.younger.shelter ( d );
+            } else if (d.getAge () > this.d.getAge ()) {
+                if (this.older == null) {
+                    this.older = new DogNode ( d );
+                    this.older.parent = this;
+                } else this.older = this.older.shelter ( d );
+            }
+
+            return this;
         }
 
         public DogNode adopt ( Dog d ) {
