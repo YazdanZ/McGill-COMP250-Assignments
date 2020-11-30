@@ -98,20 +98,74 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public DogNode shelter ( Dog d ) {
+            DogNode newRoot;
+            newRoot = this;
+
             // perform BST insertion
             if (d.getAge () < this.d.getAge ()) {
+
                 if (this.younger == null) {
                     this.younger = new DogNode ( d );
                     this.younger.parent = this;
                 } else this.younger = this.younger.shelter ( d );
-            } else if (d.getAge () > this.d.getAge ()) {
+
+                    // Rotate if the max heap property doesn't hold
+                    if (this.younger != null && this.younger.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
+                        newRoot = this.rotateRight ();
+                    }
+                } else {
                 if (this.older == null) {
                     this.older = new DogNode ( d );
                     this.older.parent = this;
                 } else this.older = this.older.shelter ( d );
-            }
 
-            return this;
+                    // Rotate if the max heap property doesn't hold
+                    if (this.older != null && this.older.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
+                        newRoot = this.rotateLeft ();
+                    }
+                }
+
+            return newRoot;
+        }
+
+        /**
+         *         P                 L
+         *       /  \   rotation    / \
+         *      L    R   ==>       A   P
+         *     / \                    / \
+         *    A   B                  B   R
+         *
+         */
+        private DogNode rotateRight () {
+            DogNode L = this.younger;
+            DogNode B = this.younger.older;
+
+            L.parent = this.parent;
+            L.older = this;
+            this.parent = L;
+            this.younger = B;
+
+            return L;
+        }
+
+        /**
+         *         P                 R
+         *        / \   rotation    / \
+         *       L   R   ==>       P   B
+         *          / \           / \
+         *         A   B         L   A
+         *
+         */
+        private DogNode rotateLeft () {
+            DogNode R = this.older;
+            DogNode A = this.older.younger;
+
+            R.parent = this.parent;
+            R.younger = this;
+            this.parent = R;
+            this.older = A;
+
+            return R;
         }
 
         public DogNode adopt ( Dog d ) {
