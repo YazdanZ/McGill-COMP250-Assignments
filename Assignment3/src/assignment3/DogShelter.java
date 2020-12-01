@@ -185,19 +185,24 @@ public class DogShelter implements Iterable<Dog> {
                 if (this.younger == null && this.older == null)
                     newRoot = null;
                 else if (this.younger != null && this.older != null) {
-                    if (this.younger.d.getDaysAtTheShelter () > this.older.d.getDaysAtTheShelter ()) {
-                        newRoot = rotateLeft ();
-
+                    if (newRoot.younger.d.getDaysAtTheShelter () < newRoot.older.d.getDaysAtTheShelter ()){
+                        newRoot = newRoot.rotateLeft ();
                         newRoot.younger = newRoot.younger.adopt ( d );
-                    } else {
-                        newRoot = rotateRight ();
-
+                    }
+                    else {
+                        newRoot = newRoot.rotateRight ();
                         newRoot.older = newRoot.older.adopt ( d );
                     }
+
                 } else {
-                    if (this.younger == null)
+                    if (this.younger == null){
+                        this.older.parent = this.parent;
                         newRoot = this.older;
-                    else newRoot = this.younger;
+                    }
+                    else{
+                        this.younger.parent = this.parent;
+                        newRoot = this.younger;
+                    }
                 }
             }
 
