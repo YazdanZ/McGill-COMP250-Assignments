@@ -109,32 +109,31 @@ public class DogShelter implements Iterable<Dog> {
                     this.younger.parent = this;
                 } else this.younger = this.younger.shelter ( d );
 
-                    // Rotate if the max heap property doesn't hold
-                    if (this.younger != null && this.younger.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
-                        newRoot = this.rotateRight ();
-                    }
-                } else {
+                // Rotate if the max heap property doesn't hold
+                if (this.younger != null && this.younger.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
+                    newRoot = this.rotateRight ();
+                }
+            } else {
                 if (this.older == null) {
                     this.older = new DogNode ( d );
                     this.older.parent = this;
                 } else this.older = this.older.shelter ( d );
 
-                    // Rotate if the max heap property doesn't hold
-                    if (this.older != null && this.older.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
-                        newRoot = this.rotateLeft ();
-                    }
+                // Rotate if the max heap property doesn't hold
+                if (this.older != null && this.older.d.getDaysAtTheShelter () > this.d.getDaysAtTheShelter ()) {
+                    newRoot = this.rotateLeft ();
                 }
+            }
 
             return newRoot;
         }
 
         /**
-         *         P                 L
-         *       /  \   rotation    / \
-         *      L    R   ==>       A   P
-         *     / \                    / \
-         *    A   B                  B   R
-         *
+         * P                 L
+         * /  \   rotation    / \
+         * L    R   ==>       A   P
+         * / \                    / \
+         * A   B                  B   R
          */
         private DogNode rotateRight () {
             DogNode L = this.younger;
@@ -145,18 +144,17 @@ public class DogShelter implements Iterable<Dog> {
 
             this.younger = B;
             this.parent = L;
-            if(B != null)
+            if (B != null)
                 B.parent = this;
             return L;
         }
 
         /**
-         *         P                 R
-         *        / \   rotation    / \
-         *       L   R   ==>       P   B
-         *          / \           / \
-         *         A   B         L   A
-         *
+         * P                 R
+         * / \   rotation    / \
+         * L   R   ==>       P   B
+         * / \           / \
+         * A   B         L   A
          */
         private DogNode rotateLeft () {
             DogNode R = this.older;
@@ -167,25 +165,55 @@ public class DogShelter implements Iterable<Dog> {
 
             this.parent = R;
             this.older = A;
-            if(A != null)
+            if (A != null)
                 A.parent = this;
 
             return R;
         }
 
         public DogNode adopt ( Dog d ) {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            DogNode newRoot;
+            newRoot = this;
+
+            if (d.getAge () < this.d.getAge ()) {
+                if (this.younger != null)
+                    this.younger = this.younger.adopt ( d );
+            } else if (d.getAge () > this.d.getAge ()) {
+                if (this.older != null)
+                    this.older = this.older.adopt ( d );
+            } else if (this.d == d) {
+                if (this.younger == null && this.older == null)
+                    newRoot = null;
+                else if (this.younger != null && this.older != null) {
+                    if (this.younger.d.getDaysAtTheShelter () > this.older.d.getDaysAtTheShelter ()) {
+                        newRoot = rotateLeft ();
+
+                        newRoot.younger = newRoot.younger.adopt ( d );
+                    } else {
+                        newRoot = rotateRight ();
+
+                        newRoot.older = newRoot.older.adopt ( d );
+                    }
+                } else {
+                    if (this.younger == null)
+                        newRoot = this.older;
+                    else newRoot = this.younger;
+                }
+            }
+
+            return newRoot;
         }
 
         public Dog findOldest () {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            if(this.older == null)
+                return this.d;
+            else return this.older.findOldest ();
         }
 
         public Dog findYoungest () {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            if(this.younger == null)
+                return this.d;
+            else return this.younger.findYoungest ();
         }
 
         public Dog findDogToAdopt ( int minAge, int maxAge ) {
