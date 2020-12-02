@@ -2,6 +2,7 @@ package assignment3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class DogShelter implements Iterable<Dog> {
     public DogNode root;
@@ -222,8 +223,7 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public Dog findDogToAdopt ( int minAge, int maxAge ) {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            return null;
         }
 
         public double budgetVetExpenses ( int numDays ) {
@@ -257,20 +257,46 @@ public class DogShelter implements Iterable<Dog> {
 
 
     private class DogShelterIterator implements Iterator<Dog> {
-        // HERE YOU CAN ADD THE FIELDS YOU NEED
+        private DogNode nextDog;
 
         private DogShelterIterator () {
-            //YOUR CODE GOES HERE
+            if (root == null)
+                return;
+            nextDog = root;
+            // get to the smallest node
+            while (nextDog.younger != null)
+                nextDog = nextDog.younger;
         }
 
         public Dog next () {
-            //YOUR CODE GOES HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            if (nextDog == null)
+                throw new NoSuchElementException();
+
+            DogNode curr = nextDog;
+            if (nextDog.older != null){
+                nextDog = nextDog.older;
+                while (nextDog.younger != null)
+                    nextDog = nextDog.younger;
+                return curr.d;
+            }
+
+            while (true){
+                if (nextDog.parent == null){
+                    nextDog = null;
+                    return curr.d;
+                }
+
+                if (nextDog.parent.younger == nextDog){
+                    nextDog = nextDog.parent;
+                    return curr.d;
+                }
+                nextDog = nextDog.parent;
+            }
+
         }
 
         public boolean hasNext () {
-            //YOUR CODE GOES HERE
-            return false; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            return nextDog != null;
         }
 
     }

@@ -13,10 +13,10 @@ public class Minitester {
         testAdopt3 ();
         testFindOldest1 ();
         testFindYoungest1 ();
-        testFindDogToAdopt1 ();
-        testBudgetVetExpenses1 ();
-        testGetVetSchedule1 ();
-        testGetVetSchedule2 ();
+//        testFindDogToAdopt1 ();
+//        testBudgetVetExpenses1 ();
+//        testGetVetSchedule1 ();
+//        testGetVetSchedule2 ();
         testDogShelterIterator1 ();
         testDogShelterIterator2 ();
         testDogShelterIterator3 ();
