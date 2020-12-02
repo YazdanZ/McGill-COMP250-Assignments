@@ -14,7 +14,7 @@ public class Minitester {
         testFindOldest1 ();
         testFindYoungest1 ();
         testFindDogToAdopt1 ();
-//        testBudgetVetExpenses1 ();
+        testBudgetVetExpenses1 ();
 //        testGetVetSchedule1 ();
 //        testGetVetSchedule2 ();
         testDogShelterIterator1 ();

@@ -240,8 +240,13 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public double budgetVetExpenses ( int numDays ) {
-            // ADD YOUR CODE HERE
-            return 0.0; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            double expenses = 0.0;
+            DogShelter ds = new DogShelter ( root );
+            for (Dog dog : ds){
+                if (dog.getDaysToNextVetAppointment () <= numDays)
+                    expenses += dog.getExpectedVetCost ();
+            }
+            return expenses;
         }
 
         public ArrayList<ArrayList<Dog>> getVetSchedule () {
