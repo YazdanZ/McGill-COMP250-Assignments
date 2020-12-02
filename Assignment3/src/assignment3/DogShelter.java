@@ -186,21 +186,19 @@ public class DogShelter implements Iterable<Dog> {
                 if (this.younger == null && this.older == null)
                     newRoot = null;
                 else if (this.younger != null && this.older != null) {
-                    if (newRoot.younger.d.getDaysAtTheShelter () < newRoot.older.d.getDaysAtTheShelter ()){
+                    if (newRoot.younger.d.getDaysAtTheShelter () < newRoot.older.d.getDaysAtTheShelter ()) {
                         newRoot = newRoot.rotateLeft ();
                         newRoot.younger = newRoot.younger.adopt ( d );
-                    }
-                    else {
+                    } else {
                         newRoot = newRoot.rotateRight ();
                         newRoot.older = newRoot.older.adopt ( d );
                     }
 
                 } else {
-                    if (this.younger == null){
+                    if (this.younger == null) {
                         this.older.parent = this.parent;
                         newRoot = this.older;
-                    }
-                    else{
+                    } else {
                         this.younger.parent = this.parent;
                         newRoot = this.younger;
                     }
@@ -211,19 +209,34 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public Dog findOldest () {
-            if(this.older == null)
+            if (this.older == null)
                 return this.d;
             else return this.older.findOldest ();
         }
 
         public Dog findYoungest () {
-            if(this.younger == null)
+            if (this.younger == null)
                 return this.d;
             else return this.younger.findYoungest ();
         }
 
         public Dog findDogToAdopt ( int minAge, int maxAge ) {
-            return null;
+            if (this.findYoungest ().getAge () > maxAge)
+                return null;
+
+            else if (this.findOldest ().getAge () < minAge)
+                return null;
+
+            else if (this.d.getAge () <= maxAge && this.d.getAge () >= minAge)
+                return this.d;
+
+            else if (this.d.getAge () > maxAge)
+                return this.younger.findDogToAdopt ( minAge, maxAge );
+
+            else if (this.d.getAge () < minAge)
+                return this.older.findDogToAdopt ( minAge, maxAge );
+
+            else return null;
         }
 
         public double budgetVetExpenses ( int numDays ) {
@@ -270,23 +283,23 @@ public class DogShelter implements Iterable<Dog> {
 
         public Dog next () {
             if (nextDog == null)
-                throw new NoSuchElementException();
+                throw new NoSuchElementException ();
 
             DogNode curr = nextDog;
-            if (nextDog.older != null){
+            if (nextDog.older != null) {
                 nextDog = nextDog.older;
                 while (nextDog.younger != null)
                     nextDog = nextDog.younger;
                 return curr.d;
             }
 
-            while (true){
-                if (nextDog.parent == null){
+            while (true) {
+                if (nextDog.parent == null) {
                     nextDog = null;
                     return curr.d;
                 }
 
-                if (nextDog.parent.younger == nextDog){
+                if (nextDog.parent.younger == nextDog) {
                     nextDog = nextDog.parent;
                     return curr.d;
                 }
