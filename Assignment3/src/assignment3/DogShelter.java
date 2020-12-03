@@ -176,6 +176,8 @@ public class DogShelter implements Iterable<Dog> {
             DogNode newRoot;
             newRoot = this;
 
+            if (d == null)
+                return this;
             if (d.getAge () < this.d.getAge ()) {
                 if (this.younger != null)
                     this.younger = this.younger.adopt ( d );
@@ -242,7 +244,7 @@ public class DogShelter implements Iterable<Dog> {
         public double budgetVetExpenses ( int numDays ) {
             double expenses = 0.0;
             DogShelter ds = new DogShelter ( root );
-            for (Dog dog : ds){
+            for (Dog dog : ds) {
                 if (dog.getDaysToNextVetAppointment () <= numDays)
                     expenses += dog.getExpectedVetCost ();
             }
@@ -250,8 +252,32 @@ public class DogShelter implements Iterable<Dog> {
         }
 
         public ArrayList<ArrayList<Dog>> getVetSchedule () {
-            // ADD YOUR CODE HERE
-            return null; // DON'T FORGET TO MODIFY THE RETURN IF NEED BE
+            ArrayList<ArrayList<Dog>> result = new ArrayList<> ();
+            DogShelter ds = new DogShelter ( root );
+
+            for (Dog dog : ds) {
+                int index = dog.getDaysToNextVetAppointment () / 7;
+                ArrayList<Dog> week;
+
+                try {
+                    week = result.get ( index );
+                } catch (IndexOutOfBoundsException e) {
+                    while (result.size () < index) {
+                        result.add ( new ArrayList<> () );
+                    }
+                    week = null;
+                }
+
+                if (week == null){
+                    week = new ArrayList<> ();
+                    week.add ( dog );
+                    result.add ( week );
+                }
+                else {
+                    week.add ( dog );
+                }
+            }
+            return result;
         }
 
         public String toString () {
