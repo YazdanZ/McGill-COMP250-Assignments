@@ -184,7 +184,7 @@ public class DogShelter implements Iterable<Dog> {
             } else if (d.getAge () > this.d.getAge ()) {
                 if (this.older != null)
                     this.older = this.older.adopt ( d );
-            } else if (this.d == d) {
+            } else if (this.d.equals ( d )) {
                 if (this.younger == null && this.older == null)
                     newRoot = null;
                 else if (this.younger != null && this.older != null) {
